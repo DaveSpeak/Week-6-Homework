@@ -11,7 +11,7 @@ var buttons=[
 	{name:"Piccard",offset:0},
 	{name:"Riker",offset:0},
 	{name:"Crusher",offset:0},
-	{name:"Sisco",offset:0},
+	{name:"Sisko",offset:0},
 	{name:"Janeway",offset:0},
 	{name:"Archer",offset:0},
 	{name:"Klingon",offset:0},
@@ -19,10 +19,23 @@ var buttons=[
 	{name:"Starship",offset:0}
 	];
 var apiKey="dc6zaTOxFJmzC";
-var queryBase="http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&limit=10&q=";
+var queryBase="https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&limit=10&q=";
 var stillhtml=[];
 var animatedhtml=[];
-addbuttons();
+var additButtons=0;
+initialize();
+function initialize(){
+	// localStorage.clear();
+	var num=localStorage.getItem('additButtons');
+	if (num!=null){
+		for (var i=1;i<=num;i++){
+			buttons.push({name:localStorage.getItem('storedButton'+i),offset:0});
+		}
+		additButtons+=num;
+	}
+
+	addbuttons();
+}
 function addbuttons(){
 	$('#buttonDiv').empty();
 	for (var i=0;i<buttons.length;i++){
@@ -34,9 +47,20 @@ function addbuttons(){
 }
 $('#addNew').on('click',function(){
 	var newButton=$('#newTheme').val().trim();
+	var inotfound=true;
+	$('#newTheme').val('');
 	newButton=newButton.replace(/ /g,'_');
+	for (var i=0;i<buttons.length;i++){
+		if (buttons[i].name==newButton){inotfound=false;}
+	}
+	if (inotfound){
+	additButtons++;
 	buttons.push({name:newButton,offset:0});
+	localStorage.setItem('additButtons',additButtons);
+	localStorage.setItem('storedButton'+additButtons, newButton);
 	addbuttons();
+
+}
 });
 
 function queryGiphy(){
