@@ -1,4 +1,4 @@
-// Base array
+// queryGIFs 
 var queryGIFs={buttons:[
 	{name:"tos",offset:0},
 	{name:"tng",offset:0},
@@ -55,34 +55,8 @@ var queryGIFs={buttons:[
 		var newButton=$('#newTheme').val().trim();
 		var inotfound=true;
 		$('#newTheme').val('');
-		// I know this is not a very efficient way to do this, but couldn't figure out
-		// how to use the RegExp constructor in time...
-		// At least it works!!!
-		newButton=newButton.replace(/\*/g,'');
-		newButton=newButton.replace(/'/g,'');
+		newButton=newButton.replace(/[!@#$%^&*()+=\[\]\{\}\:\;\'\",.<>?/\\|`~]/g,'');
 		newButton=newButton.replace(/ /g,'_');
-		newButton=newButton.replace(/"/g,'');
-		newButton=newButton.replace(/!/g,'');
-		newButton=newButton.replace(/@/g,'');
-		newButton=newButton.replace(/#/g,'');
-		newButton=newButton.replace(/\$/g,'');
-		newButton=newButton.replace(/%/g,'');
-		newButton=newButton.replace(/\^/g,'');
-		newButton=newButton.replace(/&/g,'');
-		newButton=newButton.replace(/\(/g,'');
-		newButton=newButton.replace(/\)/g,'');
-		newButton=newButton.replace(/\+/g,'');
-		newButton=newButton.replace(/=/g,'');
-		newButton=newButton.replace(/:/g,'');
-		newButton=newButton.replace(/;/g,'');
-		newButton=newButton.replace(/,/g,'');
-		newButton=newButton.replace(/\./g,'');
-		newButton=newButton.replace(/\//g,'');
-		newButton=newButton.replace(/</g,'');
-		newButton=newButton.replace(/>/g,'');
-		newButton=newButton.replace(/\?/g,'');
-		newButton=newButton.replace(/~/g,'');
-		newButton=newButton.replace(/`/g,'');
 		for (var i=0;i<queryGIFs.buttons.length;i++){
 			if (queryGIFs.buttons[i].name.toLowerCase()==newButton.toLowerCase()){inotfound=false;}
 		}
@@ -106,9 +80,11 @@ var queryGIFs={buttons:[
 				var gifDiv=$('<div>').attr('class','row');
 				for (var i=0;i<3;i++){
 					if (j+i<10){
+						var rating=RETURN.data[j+i].rating;
 						queryGIFs.stillhtml[j+i]=RETURN.data[j+i].images.fixed_height_still.url;
 						queryGIFs.animatedhtml[j+i]=RETURN.data[j+i].images.fixed_height.url;
-						gifDiv.append($('<div>').attr({'class':'col-md-4','id':'gifContainer'}).append('<h2>'+"rating: "+RETURN.data[j+i].rating,
+						if (rating==''){rating="???";}
+						gifDiv.append($('<div>').attr({'class':'col-md-4','id':'gifContainer'}).append('<h2>'+"rating: "+rating,
 						$('<img>').attr({'src':queryGIFs.stillhtml[j+i],'state':'still','value':j+i,'class':'gifDisplay'})));
 					}
 				}
@@ -128,6 +104,5 @@ var queryGIFs={buttons:[
 }
 
 $(document).ready(function(){
-	// localStorage.clear();	
 	queryGIFs.initialize();
 });
