@@ -41,7 +41,7 @@ button:hover, #addNew:hover {
 
 @font-face {
 	font-family: FEC_____;
-	src:url(../fonts/FEC.ttf);
+	src:url(../fonts/FEC-font.ttf);
 }
 button {
 	border-radius: 5px;
