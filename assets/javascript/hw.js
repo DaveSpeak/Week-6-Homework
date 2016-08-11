@@ -1,5 +1,5 @@
 // queryGIFs 
-var queryGIFs={buttons:[
+var queryGIFs={topics:[
 	{name:"tos",offset:0},
 	{name:"tng",offset:0},
 	{name:"ds9",offset:0},
@@ -26,7 +26,7 @@ var queryGIFs={buttons:[
 		var num=localStorage.getItem('additButtons');
 		if (num!=null){
 			for (var i=1;i<=num;i++){
-				queryGIFs.buttons.push({name:localStorage.getItem('storedButton'+i),offset:0});
+				queryGIFs.topics.push({name:localStorage.getItem('storedButton'+i),offset:0});
 			}
 			queryGIFs.additButtons+=num;
 		}
@@ -35,17 +35,17 @@ var queryGIFs={buttons:[
 	clearUserEntries:function (){
 		localStorage.clear();
 		for (var i=0;i<queryGIFs.additButtons;i++){
-			queryGIFs.buttons.pop();
+			queryGIFs.topics.pop();
 		}
 		queryGIFs.initialize();
 	},
 	addbuttons:function(){
 		$('#buttonDiv').empty();
-		for (var i=0;i<queryGIFs.buttons.length;i++){
+		for (var i=0;i<queryGIFs.topics.length;i++){
 			var qButton=$('<button>').addClass('btn, btn-response').attr({'id':'selectButton','arrayplace':i,
-				'value':queryGIFs.buttons[i].offset,'id':queryGIFs.buttons[i].name}).html('<h3>'+queryGIFs.buttons[i].name);
+				'value':queryGIFs.topics[i].offset,'id':queryGIFs.topics[i].name}).html('<h3>'+queryGIFs.topics[i].name);
 			$('#buttonDiv').append(qButton);
-			$('#'+queryGIFs.buttons[i].name).on('click', queryGIFs.queryGiphy);
+			$('#'+queryGIFs.topics[i].name).on('click', queryGIFs.queryGiphy);
 		}
 		$('#addNew').on('click',queryGIFs.addNewButton);
 		$('#clearUser').on('click',queryGIFs.clearUserEntries);
@@ -57,12 +57,12 @@ var queryGIFs={buttons:[
 		$('#newTheme').val('');
 		newButton=newButton.replace(/[!@#$%^&*()+=\[\]\{\}\:\;\'\",.<>?/\\|`~]/g,'');
 		newButton=newButton.replace(/ /g,'_');
-		for (var i=0;i<queryGIFs.buttons.length;i++){
-			if (queryGIFs.buttons[i].name.toLowerCase()==newButton.toLowerCase()){inotfound=false;}
+		for (var i=0;i<queryGIFs.topics.length;i++){
+			if (queryGIFs.topics[i].name.toLowerCase()==newButton.toLowerCase()){inotfound=false;}
 		}
 		if (inotfound && newButton!=''){
 			queryGIFs.additButtons++;
-			queryGIFs.buttons.push({name:newButton,offset:0});
+			queryGIFs.topics.push({name:newButton,offset:0});
 			localStorage.setItem('additButtons',queryGIFs.additButtons);
 			localStorage.setItem('storedButton'+queryGIFs.additButtons, newButton);
 			queryGIFs.addbuttons();
@@ -70,7 +70,7 @@ var queryGIFs={buttons:[
 	},
 	queryGiphy:function(){
 		var queryValue=$(this).attr('id');
-		queryGIFs.buttons[$(this).attr('arrayplace')].offset++;
+		queryGIFs.topics[$(this).attr('arrayplace')].offset++;
 		queryValue=queryValue.trim().replace(/_/g,"+");
 		queryURL=queryGIFs.queryBase+queryValue+'+\"Star+Trek\"+&offset='+($(this).attr('value')*10);
 		$.ajax({url: queryURL, method: "GET"}) 
